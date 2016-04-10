@@ -14,4 +14,6 @@
 //= require jquery_ujs
 //= require_tree .
 
-angular.module('app', ['ngMaterial']);
+(function(){
+  var app = angular.module("app", ["ngMaterial", "searchModule"]);
+})();
