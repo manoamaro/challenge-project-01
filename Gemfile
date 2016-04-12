@@ -14,6 +14,9 @@ gem 'coffee-rails', '~> 4.1.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 gem 'redis', '~> 3.2'
+gem "redis-rails"
+gem 'redis-namespace'
+gem "redis-rack-cache"
 gem 'sidekiq'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
