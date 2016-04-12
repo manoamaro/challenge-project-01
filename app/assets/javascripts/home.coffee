@@ -12,8 +12,29 @@ angular.module 'searchModule', []
       return
     @querySearch = (searchText) ->
       $log.info 'Query Search ' + searchText
-      return $http.get('/search').then((response) ->
+      return $http.get('/search', {
+        params: {q: searchText}
+        }).then((response) ->
         return response.data
       )
     return
-    ]
+  ]
+  .controller 'AnalyticsCtrl', ['$http', ($http) ->
+    @analytics = {}
+
+    @updateAnalytics = () =>
+      $http.get('/analytics').then (response) =>
+        @analytics = response.data
+        return
+      return
+
+    @clearAnalytics = () =>
+      $http.delete('/analytics').then (response) =>
+        @analytics = {}
+        return
+      return
+
+    @updateAnalytics()
+
+    return
+  ]

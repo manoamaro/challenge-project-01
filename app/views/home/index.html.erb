@@ -10,7 +10,6 @@
           md-selected-item-change="ctrl.selectedItemChange(item)"
           md-items="item in ctrl.querySearch(ctrl.searchText)"
           md-item-text="item.display"
-          md-min-length="5"
           md-autofocus="true"
           placeholder="How can I help you with?">
         <md-item-template>
@@ -22,5 +21,27 @@
       </md-autocomplete>
       <br/>
     </form>
+  </md-content>
+</div>
+
+
+<div flex ng-controller="AnalyticsCtrl as ctrl" md-whiteframe="1" layout="column" ng-cloak>
+  <md-toolbar class="md-primary">
+    <div class="md-toolbar-tools">
+      <h2 class="md-flex">Analytics</h2>
+    </div>
+  </md-toolbar>
+  <md-content flex layout-padding>
+
+    <md-list>
+      <md-list-item ng-repeat="(key, value) in ctrl.analytics">
+        <p>{{key}} ({{ value }} times)</p>
+      </md-list-item>
+    </md-list>
+
+    <section layout="row" layout-align="center center">
+      <md-button class="md-raised md-primary" ng-click="ctrl.updateAnalytics()">Update Analytics</md-button>
+      <md-button class="md-raised md-warn" ng-click="ctrl.clearAnalytics()">Clear Analytics</md-button>
+    </section>
   </md-content>
 </div>
