@@ -175,3 +175,4 @@ bower.json
 # sftp configuration file
 sftp-config.json
 
+dump.rdb
