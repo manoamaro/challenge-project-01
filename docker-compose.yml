@@ -1,24 +1,44 @@
-version: '2'
-services:
-  db:
-    image: postgres
-  redis:
-    image: redis
-  web:
-    build: .
-    command: bundle exec rails s -p 3000 -b '0.0.0.0'
-    volumes:
-      - .:/app
-    ports:
-      - "3000:3000"
-    depends_on:
-      - db
-      - redis
-  sidekiq:
-    build: .
-    volumes:
-      - .:/app
-    command: bundle exec sidekiq -C config/sidekiq.yml
-    depends_on:
-      - db
-      - redis
+db:
+  image: postgres
+redis:
+  image: redis
+
+nginx:
+  image: jwilder/nginx-proxy
+  volumes:
+    - /var/run/docker.sock:/tmp/docker.sock
+  ports:
+    - "80:80"
+  links:
+    - web
+
+sidekiq:
+  build: .
+  volumes:
+    - .:/app
+  command: bundle exec sidekiq -C config/sidekiq.yml -e production
+  links:
+    - db
+    - redis
+  environment:
+    - SECRET_KEY_BASE=secret-key-base
+    - RAILS_ENV=production
+    - REDIS_URL=redis://redis:6379
+    - DATABASE_URL=postgresql://db/postgres
+
+web:
+  build: .
+  volumes:
+    - .:/app
+  command: bundle exec puma -C config/puma.rb -e production
+  links:
+    - db
+    - redis
+  environment:
+    - VIRTUAL_HOST=~.
+    - VIRTUAL_PORT=3000
+    - SECRET_KEY_BASE=secret-key-base
+    - RAILS_ENV=production
+    - REDIS_URL=redis://redis:6379
+    - RAILS_SERVE_STATIC_FILES=1
+    - DATABASE_URL=postgresql://db/postgres

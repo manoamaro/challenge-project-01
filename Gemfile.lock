@@ -79,6 +79,7 @@ GEM
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     pg (0.18.4)
+    puma (3.4.0)
     rack (1.6.4)
     rack-cache (1.6.1)
       rack (>= 0.4)
@@ -201,6 +202,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   pg
+  puma
   rails (= 4.2.6)
   redis (~> 3.2)
   redis-namespace
