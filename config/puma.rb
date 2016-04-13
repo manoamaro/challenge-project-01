@@ -11,12 +11,13 @@ if rails_env == "production"
   app_dir = '.'
   tmp_dir = "#{app_dir}/tmp"
 
-  stdout_redirect "#{app_dir}/log/puma.stdout.log", "#{app_dir}/log/puma.stderr.log", true
-
   port ENV['PORT'] || 3000
 
-  pidfile "#{tmp_dir}/pids/puma.pid"
-  state_path "#{tmp_dir}/pids/puma.state"
+  if ENV['HEROKU_APP'].nil?
+    stdout_redirect "#{app_dir}/log/puma.stdout.log", "#{app_dir}/log/puma.stderr.log", true
+    pidfile "#{tmp_dir}/pids/puma.pid"
+    state_path "#{tmp_dir}/pids/puma.state"
+  end
 else
   port ENV['PORT'] || 3000
 end
