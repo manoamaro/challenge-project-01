@@ -14,8 +14,6 @@ nginx:
 
 sidekiq:
   build: .
-  volumes:
-    - .:/app
   command: bundle exec sidekiq -C config/sidekiq.yml -e production
   links:
     - db
@@ -28,8 +26,6 @@ sidekiq:
 
 web:
   build: .
-  volumes:
-    - .:/app
   command: bundle exec puma -C config/puma.rb -e production
   links:
     - db

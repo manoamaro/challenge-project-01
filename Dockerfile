@@ -9,7 +9,10 @@ WORKDIR /app
 
 ADD ./Gemfile /app/
 ADD ./Gemfile.lock /app/
-RUN bundle install
+RUN mkdir log
+RUN mkdir -p tmp/pids
+
+RUN bundle install --without development,tests
 
 ADD . /app
 
