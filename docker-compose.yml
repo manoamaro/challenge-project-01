@@ -3,6 +3,11 @@ db:
 redis:
   image: redis
 
+box:
+  image: busybox
+  volumes:
+    - /bundle
+
 nginx:
   image: jwilder/nginx-proxy
   volumes:
@@ -14,27 +19,32 @@ nginx:
 
 sidekiq:
   build: .
-  command: bundle exec sidekiq -C config/sidekiq.yml -e production
+  dockerfile: Dockerfile.development
+  command: ./scripts/docker-sidekiq-start.sh
   links:
     - db
     - redis
+  volumes_from:
+    - box
   environment:
     - SECRET_KEY_BASE=secret-key-base
-    - RAILS_ENV=production
+    - RAILS_ENV=development
     - REDIS_URL=redis://redis:6379
-    - DATABASE_URL=postgresql://db/postgres
+    - DATABASE_URL=postgresql://db/postgres?user=postgres&password=postgres
 
 web:
   build: .
-  command: bundle exec puma -C config/puma.rb -e production
+  dockerfile: Dockerfile.development
+  command: ./scripts/docker-web-start.sh
   links:
     - db
     - redis
+  volumes_from:
+    - box
   environment:
     - VIRTUAL_HOST=~.
     - VIRTUAL_PORT=3000
-    - SECRET_KEY_BASE=secret-key-base
-    - RAILS_ENV=production
+    - RAILS_ENV=development
     - REDIS_URL=redis://redis:6379
     - RAILS_SERVE_STATIC_FILES=1
-    - DATABASE_URL=postgresql://db/postgres
+    - DATABASE_URL=postgresql://db/postgres?user=postgres&password=postgres
