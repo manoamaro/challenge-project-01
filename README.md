@@ -61,3 +61,5 @@ So, I simply created a timeout by the user session using Sidekiq jobs. When the 
 Only Redis was used. The Postgresql dependency is for Heroku deployment.
 
 I could have used other sofisticated approaches, for example, NLP (Natural Language Processing) to figure out what the user searched after all the received query parts. Another idea is to use machine learning algorithms to analyze, after a block of received queries, what is the real query, based, for example, on the timestamp of each query part, or the syntatic proximity of each query part. These are all future works.
+
+I used, for the UX, Angular Material (AngularJS with the Material Design), taking advantage of all the facilities and components it provides.
