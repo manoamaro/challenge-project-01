@@ -11,12 +11,7 @@ class HomeController < ApplicationController
   # the last time the user typed something.
   ##
   def search
-    $redis.set "#{session.id}.query", params[:q]
-    $redis.set "#{session.id}.last_update", Time.now.to_i
-    if !$redis.exists("#{session.id}.job")
-      job_id = SaveQuery.perform_in 3.seconds.from_now, session.id
-      $redis.set "#{session.id}.job", job_id
-    end
+    send_to_analytics session.id, params[:q]
     render nothing: true
   end
 
@@ -28,6 +23,17 @@ class HomeController < ApplicationController
   def destroy_analytics
     $redis.del "analytics"
     render nothing: true
+  end
+
+
+  private
+  def send_to_analytics(session_id, query)
+    $redis.set "#{session.id}.query", query
+    $redis.set "#{session.id}.last_update", Time.now.to_i
+    if !$redis.exists("#{session.id}.job")
+      job_id = SaveQuery.perform_in 3.seconds.from_now, session_id
+      $redis.set "#{session.id}.job", job_id
+    end
   end
 
 end
